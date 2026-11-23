@@ -28,6 +28,16 @@
       .photo-caption{font-size:10px;letter-spacing:.12em}
     }
   </style>
+  <style id="project-style">
+    .project-points{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+    .project-points li{font-size:14px;line-height:1.55;color:#b6c4d4}
+    .project-points strong{color:#5eead4;font-weight:600}
+    .project-tools{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;letter-spacing:.04em;color:#8da2b8}
+    .project-code{margin-top:14px}
+    .project-code summary{cursor:pointer;color:#5eead4;font-size:13px;font-weight:600}
+    .project-code pre{margin:10px 0 0;padding:14px;background:#0b1118;border:1px solid rgba(255,255,255,.1);border-radius:8px;overflow-x:auto;max-height:420px}
+    .project-code code{font-family:"SFMono-Regular",Consolas,monospace;font-size:12px;line-height:1.5;color:#cbd5e1;white-space:pre}
+  </style>
 </head>
 <body>
   <!-- Navigation -->
@@ -287,27 +297,136 @@
       <div class="projects-grid">
         <div class="project-card">
           <div class="project-content">
-            <span class="project-tag">Python · Automation</span>
-            <h3>Network Health Check &amp; Reporting</h3>
-            <p>Python scripts for automated network health checks, log parsing, configuration comparison and operational reporting. Reduced manual effort by about 40%, saving 8+ hours per week.</p>
+            <span class="project-tag">Work experience · Routing &amp; Switching</span>
+            <h3>Enterprise Routing &amp; Switching</h3>
+            <ul class="project-points">
+              <li><strong>Challenge:</strong> Keep enterprise LAN/WAN connectivity stable and resolve routing and switching faults quickly.</li>
+              <li><strong>What I did:</strong> Troubleshot and validated OSPF, EIGRP, BGP, VLAN, STP/RSTP, HSRP and inter-VLAN routing on Cisco ISR, ASR, Catalyst and Nexus devices, including neighbour, route-learning, loop and Layer 2 issues.</li>
+              <li><strong>Result:</strong> P1/P2 incidents handled within SLA timelines, supporting 99%+ SLA compliance.</li>
+            </ul>
+            <p class="project-tools">OSPF · EIGRP · BGP · VLAN · STP/RSTP · HSRP</p>
           </div>
         </div>
         <div class="project-card">
           <div class="project-content">
-            <span class="project-tag">Ansible · Cisco</span>
-            <h3>Config Backup &amp; Compliance Automation</h3>
-            <p>Ansible playbooks for configuration backups, device health checks, compliance validation and standardized deployments across 100+ Cisco devices, cutting backup and deployment time by about 50%.</p>
+            <span class="project-tag">Work experience · Python</span>
+            <h3>Python Network Automation</h3>
+            <ul class="project-points">
+              <li><strong>Challenge:</strong> Repetitive manual health checks, log reviews and configuration comparisons took hours every week.</li>
+              <li><strong>What I did:</strong> Built Python scripts for health checks, log parsing, configuration comparison and reporting.</li>
+              <li><strong>Result:</strong> About 40% less manual effort (8+ hours per week) and about 25% fewer configuration errors.</li>
+            </ul>
+            <details class="project-code">
+              <summary>View sample script (lab version)</summary>
+              <pre><code>&quot;&quot;&quot;
+Network health check - sample lab version.
+
+Connects to Cisco IOS devices, checks interface status, OSPF neighbours and
+CPU load, then saves a CSV report.
+
+Setup:  pip install netmiko
+Usage:  set NET_USER and NET_PASS as environment variables, then run:
+        python health_check.py
+&quot;&quot;&quot;
+import csv
+import os
+import re
+from datetime import datetime
+
+from netmiko import ConnectHandler
+
+DEVICES = [&quot;192.0.2.11&quot;, &quot;192.0.2.12&quot;]  # lab devices (example addresses)
+USER = os.getenv(&quot;NET_USER&quot;)
+PASSWORD = os.getenv(&quot;NET_PASS&quot;)
+
+
+def check_device(host):
+    conn = ConnectHandler(
+        device_type=&quot;cisco_ios&quot;, host=host, username=USER, password=PASSWORD
+    )
+    interfaces = conn.send_command(&quot;show ip interface brief&quot;)
+    ospf = conn.send_command(&quot;show ip ospf neighbor&quot;)
+    cpu = conn.send_command(&quot;show processes cpu | include CPU utilization&quot;)
+    conn.disconnect()
+
+    # Interfaces reported as down (includes administratively down)
+    down = [
+        line.split()[0]
+        for line in interfaces.splitlines()
+        if &quot;down&quot; in line.lower() and not line.startswith(&quot;Interface&quot;)
+    ]
+    full_neighbours = len(re.findall(r&quot;\bFULL\b&quot;, ospf))
+    cpu_match = re.search(r&quot;five seconds: (\d+)%&quot;, cpu)
+
+    return {
+        &quot;device&quot;: host,
+        &quot;interfaces_down&quot;: &quot;, &quot;.join(down) or &quot;none&quot;,
+        &quot;ospf_full_neighbours&quot;: full_neighbours,
+        &quot;cpu_5s_percent&quot;: cpu_match.group(1) if cpu_match else &quot;n/a&quot;,
+    }
+
+
+def main():
+    rows = []
+    for host in DEVICES:
+        try:
+            rows.append(check_device(host))
+        except Exception as error:  # keep going if one device fails
+            rows.append({&quot;device&quot;: host, &quot;interfaces_down&quot;: f&quot;ERROR: {error}&quot;})
+
+    filename = f&quot;health_report_{datetime.now():%Y%m%d_%H%M}.csv&quot;
+    fields = [&quot;device&quot;, &quot;interfaces_down&quot;, &quot;ospf_full_neighbours&quot;, &quot;cpu_5s_percent&quot;]
+    with open(filename, &quot;w&quot;, newline=&quot;&quot;) as report:
+        writer = csv.DictWriter(report, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+    print(f&quot;Report saved: {filename}&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+            </details>
+            <p class="project-tools">Python · Linux · Cisco devices</p>
           </div>
         </div>
         <div class="project-card">
           <div class="project-content">
-            <span class="project-tag">Monitoring · RCA</span>
-            <h3>Incident Detection &amp; RCA Workflow</h3>
-            <p>Integrated monitoring and ITSM data (ServiceNow, Splunk, SevOne, ThousandEyes) with automated troubleshooting workflows to detect issues faster, improving P1/P2 RCA turnaround by about 30%.</p>
+            <span class="project-tag">Lab project · Wireless</span>
+            <h3>Cisco Wireless LAN Lab</h3>
+            <ul class="project-points">
+              <li><strong>Goal:</strong> Build a small enterprise wireless network with a controller and lightweight access points.</li>
+              <li><strong>What I did:</strong> Register access points with the WLC, create SSIDs and WLANs, apply WPA2/WPA3 security, and test client roaming between APs.</li>
+              <li><strong>Skills shown:</strong> AP registration, WLAN management, wireless security and roaming basics.</li>
+            </ul>
+            <p class="project-tools">Cisco WLC · LAP · WLAN · WPA2/WPA3</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-content">
+            <span class="project-tag">Work experience · Security</span>
+            <h3>Network Security &amp; VPN</h3>
+            <ul class="project-points">
+              <li><strong>Challenge:</strong> Protect enterprise networks and keep remote and site-to-site connectivity secure and reliable.</li>
+              <li><strong>What I did:</strong> Supported Cisco ASA firewalls, ACLs, NAT/PAT and IPsec VPNs (IKEv1/IKEv2), troubleshooting tunnel and access issues, and worked with AAA (TACACS+, RADIUS) and 802.1X.</li>
+              <li><strong>Result:</strong> Faster resolution of VPN and access problems, with changes recorded under ITIL change processes.</li>
+            </ul>
+            <p class="project-tools">Cisco ASA · IPsec VPN · ACL · NAT/PAT · TACACS+ · RADIUS · 802.1X</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-content">
+            <span class="project-tag">Lab project · Load Balancing</span>
+            <h3>F5 BIG-IP Load Balancer Lab</h3>
+            <ul class="project-points">
+              <li><strong>Goal:</strong> Distribute traffic across multiple servers and keep an application available if one server fails.</li>
+              <li><strong>What I did:</strong> Configure nodes, pools and pool members on an F5 BIG-IP LTM, create a virtual server, add health monitors, and test persistence and SSL offloading.</li>
+              <li><strong>Skills shown:</strong> Load balancing methods, health monitoring, persistence and SSL offloading.</li>
+            </ul>
+            <p class="project-tools">F5 BIG-IP LTM · Virtual Servers · Pools · Health Monitors</p>
           </div>
         </div>
       </div>
-      <p class="projects-note"></p>
     </div>
   </section>
 
