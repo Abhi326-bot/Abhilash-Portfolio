@@ -9,6 +9,25 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <style id="photo-style">
+    .hero-image-wrapper{position:relative !important;display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;width:auto !important;height:auto !important}
+    .hero-image-wrapper .profile-ring{display:none !important}
+    .photo-frame{position:relative;width:min(380px,80vw);padding:16px;border:1px solid rgba(45,212,191,.4);background:rgba(15,25,35,.6)}
+    .photo-frame .profile-photo{position:relative !important;inset:auto !important;top:auto !important;left:auto !important;transform:none !important;margin:0 !important;width:100% !important;height:auto !important;aspect-ratio:4/5;border:none !important;box-shadow:none !important;overflow:hidden;border-radius:140px 140px 60px 60px !important}
+    .photo-frame .profile-photo img{width:100% !important;height:100% !important;object-fit:cover;object-position:center top;display:block;border-radius:0}
+    .photo-frame .floating-badge{position:absolute !important;bottom:auto !important;margin:0 !important}
+    .photo-frame .badge-1{top:8% !important;right:-14% !important;left:auto !important}
+    .photo-frame .badge-2{top:auto !important;bottom:12% !important;left:-18% !important;right:auto !important}
+    .photo-frame .badge-3{top:48% !important;right:-16% !important;left:auto !important;bottom:auto !important}
+    .photo-caption{margin-top:22px;display:flex;align-items:center;gap:12px;font-family:"SFMono-Regular",Consolas,monospace;font-size:12px;letter-spacing:.18em;color:#9fb3c8}
+    .caption-dot{width:9px;height:9px;border-radius:50%;background:#5eead4;display:inline-block}
+    @media (max-width:700px){
+      .photo-frame .badge-1{right:-4% !important}
+      .photo-frame .badge-2{left:-4% !important}
+      .photo-frame .badge-3{right:-4% !important}
+      .photo-caption{font-size:10px;letter-spacing:.12em}
+    }
+  </style>
 </head>
 <body>
   <!-- Navigation -->
@@ -64,59 +83,33 @@
       </div>
 
       <div class="hero-image-wrapper">
-        <div class="profile-ring"></div>
-        <div class="profile-photo">
-          <img src="profile.jpg" alt="Abhilash GS" />
-        </div>
-        <div class="floating-badge badge-1">
-          <span class="badge-icon">⚡</span>
-          <div>
-            <strong>Network Automation</strong>
-            <small>Python · Ansible</small>
+        <div class="photo-frame">
+          <div class="profile-photo">
+            <img src="profile.jpg" alt="Abhilash GS" />
+          </div>
+          <div class="floating-badge badge-1">
+            <span class="badge-icon">⚡</span>
+            <div>
+              <strong>Network Automation</strong>
+              <small>Python · Ansible</small>
+            </div>
+          </div>
+          <div class="floating-badge badge-2">
+            <span class="badge-icon">📡</span>
+            <div>
+              <strong>Cisco Wireless</strong>
+              <small>Catalyst 9800 · WLC</small>
+            </div>
+          </div>
+          <div class="floating-badge badge-3">
+            <span class="badge-icon">🔒</span>
+            <div>
+              <strong>Security</strong>
+              <small>ASA · IPsec · ISE</small>
+            </div>
           </div>
         </div>
-        <div class="floating-badge badge-2">
-          <span class="badge-icon">📡</span>
-          <div>
-            <strong>Cisco Wireless</strong>
-            <small>Catalyst 9800 · WLC</small>
-          </div>
-        </div>
-        <div class="floating-badge badge-3">
-          <span class="badge-icon">🔒</span>
-          <div>
-            <strong>Security</strong>
-            <small>ASA · IPsec · ISE</small>
-          </div>
-        </div>
-        <div class="floating-badge badge-4" style="top:auto; right:auto; bottom:6%; left:2%;">
-          <span class="badge-icon">🌐</span>
-          <div>
-            <strong>Routing &amp; Switching</strong>
-            <small>OSPF · BGP · EIGRP</small>
-          </div>
-        </div>
-        <div class="floating-badge badge-5" style="top:4%; right:auto; bottom:auto; left:4%;">
-          <span class="badge-icon">🛠️</span>
-          <div>
-            <strong>Operations</strong>
-            <small>ITIL v4 · RCA · SLA</small>
-          </div>
-        </div>
-        <div class="floating-badge badge-6" style="top:46%; right:-6%; bottom:auto; left:auto;">
-          <span class="badge-icon">🎓</span>
-          <div>
-            <strong>Certified</strong>
-            <small>CCNA · ITIL v4 · ThousandEyes</small>
-          </div>
-        </div>
-        <div class="floating-badge badge-7" style="top:auto; right:auto; bottom:-3%; left:30%;">
-          <span class="badge-icon">📊</span>
-          <div>
-            <strong>Monitoring</strong>
-            <small>Splunk · ThousandEyes · PRTG</small>
-          </div>
-        </div>
+        <div class="photo-caption"><span class="caption-dot"></span>NETWORK ENGINEER / CISCO ENTHUSIAST</div>
       </div>
     </div>
     <div class="scroll-indicator">
